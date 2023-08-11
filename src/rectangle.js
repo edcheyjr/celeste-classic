@@ -24,11 +24,13 @@ class Rectangle {
     ctx.fillRect(this.x, this.y, this.width, this.height)
     ctx.restore()
   }
-  update(deltaTime) {
-    // move from left to right and back to start
+  update(deltaTime, newSpeed) {
+    // if out of canvas reset postion
     if (this.x > this.canvasWidth + this.width) {
+      if (newSpeed) {
+        this.speed = newSpeed
+      }
       this.x = -this.width
-      this.y = Math.floor(Math.random() * this.canvasHeight)
     }
     this.x = Math.floor(this.x + this.speed)
   }
