@@ -7,8 +7,9 @@ class Background {
     this.bgImage = bgImage
     this.totalRectangles = 20
     this.rectangles = []
-    this.rectMaxSpeed = 12
-    this.rectMinSpeed = 5
+    this.rectMaxSpeed = 15
+    this.rectMinSpeed = 3
+    this.rectSpeed = Math.random() * this.rectMaxSpeed + this.rectMinSpeed
     this.#_intializeRectangles()
   }
   draw(ctx) {
@@ -30,15 +31,15 @@ class Background {
   update(deltaTime) {
     // update
     this.rectangles.forEach((rectangle) => {
-      rectangle.update(deltaTime)
+      rectangle.update(deltaTime, this.rectSpeed)
     })
   }
   #_intializeRectangles() {
     for (let i = 0; i < this.totalRectangles; i++) {
       let randomWidth = Math.floor(Math.random() * 150 + 80)
-      let randomRectSpeed = Math.floor(
+      let randomRectSpeed =
         Math.random() * this.rectMaxSpeed + this.rectMinSpeed
-      )
+
       let randomHeight = Math.floor(Math.random() * 50 + 15)
       this.rectangles.push(
         new Rectangle(
