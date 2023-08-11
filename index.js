@@ -17,6 +17,7 @@ bgImage.style.fill = '#847E87'
 
 // new bg
 let bg = new Background(CANVAS_WIDTH, CANVAS_HEIGHT, bgImage)
+let newParticles = new Particles(CANVAS_WIDTH, CANVAS_HEIGHT)
 
 function animate(timestamp) {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
@@ -27,6 +28,10 @@ function animate(timestamp) {
   bg.draw(ctx)
   bg.update(deltatime)
   // console.log('timestamp', timestamp)
+
+  // draw particles the last
+  newParticles.draw(ctx)
+  newParticles.update(deltatime)
   requestAnimationFrame(animate)
 }
 
