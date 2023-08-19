@@ -1,8 +1,8 @@
 # Celeste classic My Version
 
-This an attempt to clone [celeste classic](https://mattmakesgames.itch.io/celesteclassic) in javascript with a little bit of my own touches
+This fun project to an attempt to clone [celeste classic](https://mattmakesgames.itch.io/celesteclassic) in javascript with a little bit of my own touches.
 
-# Project Roadmap 🚀 - Celeste's Classic CloneGame Development
+# Project Roadmap 🚀 - Celeste's Classic Game Development
 
 This roadmap outlines the steps and milestones for the development of a game inspired by Celeste. The project will involve designing game sprites, creating backgrounds, implementing level designs, and more. Follow along as we venture into uncharted territory, crafting an exciting gaming experience.
 
@@ -25,7 +25,7 @@ This roadmap outlines the steps and milestones for the development of a game ins
 - [ ] Break - Take a breather 😮‍💨
 - [ ] Write tests for the game (using Jest and Cypress)
 - [ ] Set up CI/CD with Jenkins
-- [ ] Work On Music of the game using [LMMS]()
+- [ ] Work On Music of the game using [LMMS](https://lmms.io/)
 - [ ] Host the game under my portfolio games section
 
 ## Embarking into the Uncharted
