@@ -26,6 +26,7 @@ class Particle extends Rectangle {
     super.draw(ctx)
   }
   update(deltaTime) {
+    //TODO: Move this to helper function if required else where calcuating curve and angle speed migth need it when calculating jump
     this.x = this.x + this.speed
     this.y += this.curve * Math.sin(this.angle)
     this.angle += this.angleSpeed
