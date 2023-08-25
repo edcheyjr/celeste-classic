@@ -29,7 +29,7 @@ This roadmap outlines the steps and milestones for the development of a game ins
 - [ ] Post on [my blog](https://www.notion.so/My-Portfolio-Update-805e0a494f9344318646ac65cabc3b6e?pvs=21) and start working on a Vlog to explain the code and thought process, similar to a tutorial
 - [ ] Post on Twitter, Medium, YouTube, and my blog
 - [ ] Break - Take a breather 😮‍💨
-- [ ]Custom Level design UI. something like a table where you can visual design level then that is translated to the 1D array used to make the levels
+- [ ] Custom Level design UI. something like a table where you can visual design level then that is translated to the 1D array used to make the levels
 - [ ] Write tests for the game (using Jest and Cypress)
 - [ ] Set up CI/CD with Jenkins
 - [ ] Work On Music of the game using [LMMS](https://lmms.io/)
