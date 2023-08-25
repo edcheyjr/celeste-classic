@@ -1,7 +1,13 @@
 // TODO calculate curve for a jump
 function curveMovement() {}
 
-function findColAndRowFor1DArr(currentIndex, totRows) {
+/**
+ * Index to (x,y) converter
+ * @param {number} index current postion
+ * @param {number} totRows totla number of Rows
+ * @returns {{row:number, col:number}} return row and col values for the given index provided their is  a total number of rows to
+ */
+function findColAndRowFor1DArr(index, totRows) {
   const row = Math.floor(index / totRows)
   const col = index % totRows
   return { row, col }
