@@ -19,7 +19,6 @@ This roadmap outlines the steps and milestones for the development of a game ins
 - [ ] Work on character sprite and animation design
 - [ ] Work on gameplay design - Character movement, special movements, rules for game over, keyboard movement, collision detection, and more... (To be broken down into smaller tasks)
 - [ ] Break - Take a breather 😮‍💨
-
 - [ ] Switching from one level to another
 - [ ] Game over, scores, and first-level design
 - [ ] Game menu design
