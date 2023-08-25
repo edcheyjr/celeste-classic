@@ -45,7 +45,7 @@ class Tile {
     // Draw a rectangle which will act as the rigidbody mesh also used to determine collisions
     ctx.save()
     ctx.strokeStyle = '#fff230'
-    ctx.strokeRect(x, y, this.width, this.height)
+    ctx.strokeRect(this.x, this.y, this.tileWidth, this.tileWidth)
     ctx.restore()
 
     // draw Tile
