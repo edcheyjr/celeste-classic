@@ -21,7 +21,7 @@ function levelGenerator(level, rows, cols) {
       y: 4 * lastItemRowIndex * 2,
       col: cols,
       row: rows,
-      disableRigidBody: true,
+      disableRigidBody: false,
     })
   )
   // all the game objects that will be used by the tiles class

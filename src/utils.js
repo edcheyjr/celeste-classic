@@ -15,9 +15,21 @@ function findColAndRowFor1DArr(index, totRows) {
 
 /**
  * Checks if two rectangle collide or not
- * @param {*} rect
- * @param {*} rect2
- * @returns
+ * _____________________________________
+ *
+ * @param {object} rect first rectangle params
+ * @param {number} rect.x x position
+ * @param {number} rect.y y position
+ * @param {number} rect.width width
+ * @param {number} rect.height height
+ * @param {object} rect2 second rectangle params
+ * @param {number} rect2.x x position
+ * @param {number} rect2.y y position
+ * @param {number} rect2.width width
+ * @param {number} rect2.height height
+ * __________________________________
+ *
+ * @returns {boolean}
  */
 
 function checkRectangleCollusion(rect, rect2) {
@@ -102,8 +114,12 @@ function getIntersection(A, B, C, D) {
  * Test for intersection
  *-----------------------
  * @description test if two polygon{Rectangle, Circle e.t.c} intersect and return a boolean between two polygon
+ * ____________________________________________________________________________
+ *
  * @param {number[]} poly1 polygon one
  * @param {number[]} poly2 polygon two
+ * ______________________________________________
+ *
  * @returns {bool} true | false depending if whether the two polygon intersect
  */
 function polysIntersect(poly1, poly2) {
