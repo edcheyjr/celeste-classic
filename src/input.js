@@ -1,3 +1,6 @@
+/**
+ * This is the input listener singleton
+ */
 class InputSingleton {
   constructor() {
     if (InputSingleton._instance) {
@@ -11,25 +14,21 @@ class InputSingleton {
 
     //keypress events
     window.addEventListener('keydown', (e) => {
-      if (
-        (e.key == KEY_DOWN ||
-          e.key == KEY_UP ||
-          e.key == KEY_LEFT ||
-          e.key == KEY_RIGHT) &&
-        this.keys.indexOf(e.key) === -1
-      ) {
+      if (this.#checkKeys(e) && this.keys.indexOf(e.key) === -1) {
+        if (e.key.length == 1) {
+          this.keys.push(e.key.toUpperCase())
+        }
         this.keys.push(e.key)
       } else if (e.key == ENTER && GAME_OVER) {
-        restartGame()
+        restartGame() //TODO CHANGE WILL HAVE A MENU
       }
     })
     window.addEventListener('keyup', (e) => {
-      if (
-        e.key === KEY_DOWN ||
-        e.key == KEY_UP ||
-        e.key == KEY_LEFT ||
-        e.key == KEY_RIGHT
-      ) {
+      // console.log('KEY', e.key)
+      if (this.#checkKeys(e)) {
+        if (e.key.length == 1) {
+          this.keys.splice(this.keys.indexOf(e.key.toUpperCase()), 1)
+        }
         this.keys.splice(this.keys.indexOf(e.key), 1)
       }
     })
@@ -72,12 +71,44 @@ class InputSingleton {
     })
     window.addEventListener('touchend', (e) => {
       console.log('keys', this.keys)
-      // clean up keys
+      // clean up swipe actions
       this.keys.splice(this.keys.indexOf(SWIPE_UP), 1)
       this.keys.splice(this.keys.indexOf(SWIPE_DOWN), 1)
       this.keys.splice(this.keys.indexOf(SWIPE_RIGHT), 1)
       this.keys.splice(this.keys.indexOf(SWIPE_LEFT), 1)
     })
+  }
+  /**
+   * checks if key exist in the keys[]
+   * ___________________________________
+   *
+   * @param {string} key Key up down right left or Z,X,C
+   * __________________________________
+   *
+   * @returns {boolean}
+   */
+  checkIfAKeyExists(key) {
+    console.log('keys', this.keys)
+    return this.keys.indexOf(key) > -1
+  }
+
+  /**
+   * Match keys
+   * @param {KeyboardEvent} e Keyboard event
+   */
+  #checkKeys(e) {
+    if (
+      e.key === KEY_DOWN ||
+      e.key == KEY_UP ||
+      e.key == KEY_LEFT ||
+      e.key == KEY_RIGHT ||
+      e.key.toUpperCase() == KEY_Z ||
+      e.key.toUpperCase() == KEY_C ||
+      e.key.toUpperCase() == KEY_X
+    ) {
+      return true
+    }
+    return false
   }
 }
 
@@ -89,7 +120,7 @@ class InputHandler {
    * get Input Instance
    * @description ensure that only one InputHandler is used
    * _____________________
-   * ____________________
+   * _____________________
    * @returns {InputSingleton} input singleton class
    */
   static getInstance() {
