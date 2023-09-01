@@ -17,12 +17,11 @@ class Player {
    * @param {number} params.gravity down force constantly acting on the player
    * @param {number} params.friction a opposite force that causes drag and  ulimate stops items for ever moving in one direction
    * @param {number} params.acceleration value which will be calcuated as the acceleration in any give direction that the player directs
-   * @param {number} params.jumpVelocity velocity at which the player can jump up before starting to fall
+   * @param {number} params.vy y velocity
    * @param {number} params.dashVelocity velocity at which the player can double jump or dash left or right or up midair or on the ground which pressed a key e,g C
    * @param {number} params.climbingVelocity velocity at which the player climbs down or up a "mountain" this should alway be less that the gravity range[0 and 0.9]
    */
   constructor(params) {
-    const minimum = 1
     this.image = new Image()
     this.image.src = params.src
     this.spriteWidth = params.spriteWidth || this.image.width
@@ -32,12 +31,15 @@ class Player {
     this.width = params.width
     this.height = params.height
     this.gravity = params.gravity || 1 //TODO FUN FACT GRAVITY FOR EARTH
-    this.gravitySpeed = this.gravity * 9.807
+    this.gravitySpeed = this.gravity * 0.9807
     this.acceleration = params.acceleration || 1
     this.speed = 0
-    this.jumpVelocity = 15
-    this.friction = params.friction || 1
+    this.collided = false
+    this.vx = 0 //TODO if we are going for a friction on surface also
+    this.friction = params.friction || 1 //TODO if we are going for a friction on surface also
     this.x = params.x
+    this.vy = 0
+    this.jumpVelocity = 10
     this.y = params.y
   }
   // restart player when game over
@@ -84,8 +86,6 @@ class Player {
   update(deltaTime, input, tiles) {
     // deltaTime important in determine refresh rate of the player animations
     // The player should keep falling due to gravity
-    this.y += this.gravitySpeed
-
     // The player move from left or right
     this.x += this.speed
     // Add a collusion detection which will determine the rigidbody which will be if the player and the tiles have collided and is not spikes
@@ -103,10 +103,12 @@ class Player {
     })
     // added input handling function
     this.#handlePlayerMovements(input)
+    //player on air
+    this.#playerOnAir()
   }
 
   #asPlayerClimbedSuccessfully() {
-    if (this.y > 0) {
+    if (this.y < 0) {
       return true
     }
     return false
@@ -124,35 +126,21 @@ class Player {
   }
   /**
    * this function check collusion of the player with other game objects with collision detection
-   * ___________________________________________________________________
+   * ____________________________________________________________________________________________
+   *
    * @param {Tile} tile tile object
    *
    */
   #collusionDetectionObjectsWithRigidBody(tile) {
-    const playerRect = {
-      x: this.x,
-      y: this.y,
-      width: this.width,
-      height: this.height,
-    }
-    const tileRect = {
-      x: tile.x,
-      y: tile.y,
-      width: tile.width,
-      height: tile.height,
-    }
-    // console.log('disableRigidbody', tile)
-    const isCollided = checkRectangleCollusion(playerRect, tileRect)
-    // console.log('isCollided', isCollided)
-    // tile.setIsCollided(isCollided)
-
+    const isCollided = this.#asCollidedWithATile(tile)
     if (isCollided && !tile.disableRigidBody) {
+      // add that found collusion from a tile if any other will be returning false
+      // console.log('isCollided', isCollided)
+      this.collided = isCollided
       // re-position the player to the top of the tile
       if (this.y + this.height >= tile.y) {
         // console.log('y change')
-        this.y == tile.y - this.height
-        // add same acting force on the opposite direction //TODO one can argue why not just set gravity to zero well maybe i'll do that
-        this.y -= this.gravitySpeed
+        this.y == tile.y - this.height - 2
       }
       // also do the same fo the sides if the player hit tile on the side reposition the player just next to the tile
       // // left
@@ -176,10 +164,30 @@ class Player {
   }
   // checks if the player as fallen beyond gamescreen
   #asPlayerFallen() {
-    if (this.y > this.canvasHeight + this.height) {
+    if (this.y > CANVAS_WIDTH) {
       return true
     }
     return false
+  }
+
+  #playerOnAir() {
+    //TODO: if the player is collided with the tiles sides the activate the gravity but only half or less
+    //if the player is not collided with any tiles or reach end of the canvas or fallen or successful jumpover to the next section then they are on air thus activate gravity
+    console.log('player climbed', this.#asPlayerClimbedSuccessfully())
+    console.log('collided', this.collided)
+    console.log('as player fallen', this.#asPlayerFallen())
+    if (
+      !this.#asPlayerFallen() &&
+      !this.collided &&
+      !this.#asPlayerClimbedSuccessfully()
+    ) {
+      this.vy += this.gravitySpeed
+    } else {
+      // set velocity y to 0
+      this.vy = 0
+    }
+    // vertical movement can be the speed of gravity or 0
+    this.y += this.vy
   }
 
   /**
@@ -190,22 +198,66 @@ class Player {
     // handle moving right up down left <- ^ -> jump pressing Z up and down to do nothing for now
     //left right inputs
     if (
-      input.keys.indexOf(KEY_RIGHT) > -1 ||
-      input.keys.indexOf(SWIPE_RIGHT) > -1
+      input.checkIfAKeyExists(KEY_RIGHT) ||
+      input.checkIfAKeyExists(SWIPE_RIGHT)
     ) {
       this.speed = 5
     } else if (
-      input.keys.indexOf(KEY_LEFT) > -1 ||
-      input.keys.indexOf(SWIPE_LEFT) > -1
+      input.checkIfAKeyExists(KEY_LEFT) ||
+      input.checkIfAKeyExists(SWIPE_LEFT)
     ) {
       this.speed = -5
     } else {
       this.speed = 0
     }
+    //Simple Jump
+    console.log(
+      'input.checkIfAKeyExists(KEY_X)',
+      input.checkIfAKeyExists(KEY_X)
+    )
+    if (
+      (input.checkIfAKeyExists(KEY_X) || input.checkIfAKeyExists(SWIPE_UP)) &&
+      // !this.#asPlayerFallen() &&
+      this.collided
+      // !this.#asPlayerClimbedSuccessfully()
+    ) {
+      console.log('Jumping')
+      this.collided = false
+      this.vy -= this.jumpVelocity
+    }
+
     // will help in directing angle of jump on vertical walls i.e if the player touch a vertical wall they will jump at an angle 45
     // handle special movement such as dash climb and double jump
     // the player will also have some special movement jumping dashing and climbing down
     // Dash will require  up and down and right for directing the direction of the dash which if executed after a jump will result in a double jump with the second jump dependant on the direction
+  }
+
+  /**
+   * Quick check to check if the player as collided with any tile given
+   * _________________________________________________________________
+   *
+   * @param {Tile} tile tile object
+   * ________________________________________________________________
+   *
+   * @returns {boolean}
+   *
+   */
+  #asCollidedWithATile(tile) {
+    const playerRect = {
+      x: this.x,
+      y: this.y,
+      width: this.width,
+      height: this.height,
+    }
+    const tileRect = {
+      x: tile.x,
+      y: tile.y,
+      width: tile.width,
+      height: tile.height,
+    }
+    // console.log('disableRigidbody', tile)
+    const isCollided = checkRectangleCollusion(playerRect, tileRect)
+    return isCollided // return results
   }
 }
 
