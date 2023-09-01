@@ -1,10 +1,15 @@
 const ROWS = 20
 const COLS = 20
 
+/** @constant EMPTY value 0 */
 const EMPTY = 0
 const UNDERGROUND = 1
 const SURFACE = 2
 
+/**
+ * Example Level map
+ * @type {number[]}
+ * @constant level1_1D  */
 const level1_1D = new Array(COLS * ROWS).fill(EMPTY) // Create a 1D array filled with EMPTY (0)
 
 // for testing
