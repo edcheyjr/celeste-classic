@@ -14,6 +14,8 @@ const level1_1D = new Array(COLS * ROWS).fill(EMPTY) // Create a 1D array filled
 
 // for testing
 level1_1D.fill(SURFACE, 0, 20) // Set the first row to SUFACE (1)
+level1_1D.fill(UNDERGROUND, 355, 358)
+level1_1D.fill(SURFACE, 352, 355)
 level1_1D.fill(SURFACE, 360, 380) // Set the first row to SUFACE (1)
 level1_1D.fill(UNDERGROUND, 380, 400) // Set the last row to UNDERGROUND (2)
 

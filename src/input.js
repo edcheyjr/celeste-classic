@@ -70,7 +70,6 @@ class InputSingleton {
       }
     })
     window.addEventListener('touchend', (e) => {
-      console.log('keys', this.keys)
       // clean up swipe actions
       this.keys.splice(this.keys.indexOf(SWIPE_UP), 1)
       this.keys.splice(this.keys.indexOf(SWIPE_DOWN), 1)
@@ -88,7 +87,6 @@ class InputSingleton {
    * @returns {boolean}
    */
   checkIfAKeyExists(key) {
-    console.log('keys', this.keys)
     return this.keys.indexOf(key) > -1
   }
 

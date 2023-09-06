@@ -39,7 +39,7 @@ class Player {
     this.friction = params.friction || 1 //TODO if we are going for a friction on surface also
     this.x = params.x
     this.vy = 0
-    this.jumpVelocity = 10
+    this.jumpVelocity = 16
     this.y = params.y
   }
   // restart player when game over
@@ -85,8 +85,9 @@ class Player {
    */
   update(deltaTime, input, tiles) {
     // deltaTime important in determine refresh rate of the player animations
-    // The player should keep falling due to gravity
-    // The player move from left or right
+    //player on air
+    this.#playerOnAir()
+    // move left and right
     this.x += this.speed
     // Add a collusion detection which will determine the rigidbody which will be if the player and the tiles have collided and is not spikes
     this.#hitSideWalls()
@@ -103,8 +104,6 @@ class Player {
     })
     // added input handling function
     this.#handlePlayerMovements(input)
-    //player on air
-    this.#playerOnAir()
   }
 
   #asPlayerClimbedSuccessfully() {
@@ -133,23 +132,27 @@ class Player {
    */
   #collusionDetectionObjectsWithRigidBody(tile) {
     const isCollided = this.#asCollidedWithATile(tile)
-    if (isCollided && !tile.disableRigidBody) {
+    if (isCollided && !tile.disableRigidbBody) {
       // add that found collusion from a tile if any other will be returning false
-      // console.log('isCollided', isCollided)
-      this.collided = isCollided
       // re-position the player to the top of the tile
       if (this.y >= tile.y - this.height) {
-        // console.log('y change')
+        this.collided = true
         this.y = tile.y - this.height
       }
-      // also do the same fo the sides if the player hit tile on the side reposition the player just next to the tile
-      // // left
-      if (this.x <= tile.x + tile.width && this.y == tile.y) {
-        this.x == tile.x + tile.width
-      }
-      // right
-      if (this.x + this.width >= tile.x && this.y == tile.y) {
-        this.x = tile.x - this.width
+      // hit the top reset to just the bottom of the tile and set collided to false after that so that the player starts falling again
+      else if (this.y <= tile.y + tile.height) {
+        this.y = tile.y + tile.height
+        this.collided = false
+      } else {
+        // means it as not hit top or bottom check sides
+        // also do the same fo the sides if the player hit tile on the side reposition the player just next to the tile
+        // // left
+        if (this.x <= tile.x + tile.width) {
+        }
+        // right
+        if (this.x + this.width >= tile.x) {
+          this.x = tile.x - this.width
+        }
       }
     }
     // also make sure to check if the player falls beyond canvas height restart the section
@@ -173,9 +176,6 @@ class Player {
   #playerOnAir() {
     //TODO: if the player is collided with the tiles sides the activate the gravity but only half or less
     //if the player is not collided with any tiles or reach end of the canvas or fallen or successful jumpover to the next section then they are on air thus activate gravity
-    console.log('player climbed', this.#asPlayerClimbedSuccessfully())
-    console.log('collided', this.collided)
-    console.log('as player fallen', this.#asPlayerFallen())
     if (
       !this.#asPlayerFallen() &&
       !this.collided &&
@@ -188,6 +188,7 @@ class Player {
     }
     // vertical movement can be the speed of gravity or 0
     this.y += this.vy
+    this.collided = false
   }
 
   /**
@@ -211,14 +212,12 @@ class Player {
       this.speed = 0
     }
     //Simple Jump
-    console.log('Pressed X Key', input.checkIfAKeyExists(KEY_X))
     if (
       (input.checkIfAKeyExists(KEY_X) || input.checkIfAKeyExists(SWIPE_UP)) &&
-      // !this.#asPlayerFallen() &&
-      this.collided
-      // !this.#asPlayerClimbedSuccessfully()
+      this.collided &&
+      !this.#asPlayerFallen() &&
+      !this.#asPlayerClimbedSuccessfully()
     ) {
-      console.log('Jumping')
       this.collided = false
       this.vy -= this.jumpVelocity
     }
@@ -229,7 +228,9 @@ class Player {
     // Dash will require  up and down and right for directing the direction of the dash which if executed after a jump will result in a double jump with the second jump dependant on the direction
   }
 
-  /**
+  /**    console.log('player climbed', this.#asPlayerClimbedSuccessfully())
+    console.log('collided', this.collided)
+    console.log('as player fallen', this.#asPlayerFallen())
    * Quick check to check if the player as collided with any tile given
    * _________________________________________________________________
    *
@@ -252,7 +253,6 @@ class Player {
       width: tile.width,
       height: tile.height,
     }
-    // console.log('disableRigidbody', tile)
     const isCollided = checkRectangleCollusion(playerRect, tileRect)
     return isCollided // return results
   }
