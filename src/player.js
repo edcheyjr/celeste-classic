@@ -138,9 +138,9 @@ class Player {
       // console.log('isCollided', isCollided)
       this.collided = isCollided
       // re-position the player to the top of the tile
-      if (this.y + this.height >= tile.y) {
+      if (this.y >= tile.y - this.height) {
         // console.log('y change')
-        this.y == tile.y - this.height - 2
+        this.y = tile.y - this.height
       }
       // also do the same fo the sides if the player hit tile on the side reposition the player just next to the tile
       // // left
@@ -211,10 +211,7 @@ class Player {
       this.speed = 0
     }
     //Simple Jump
-    console.log(
-      'input.checkIfAKeyExists(KEY_X)',
-      input.checkIfAKeyExists(KEY_X)
-    )
+    console.log('Pressed X Key', input.checkIfAKeyExists(KEY_X))
     if (
       (input.checkIfAKeyExists(KEY_X) || input.checkIfAKeyExists(SWIPE_UP)) &&
       // !this.#asPlayerFallen() &&
