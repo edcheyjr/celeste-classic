@@ -228,16 +228,14 @@ class Player {
     // Dash will require  up and down and right for directing the direction of the dash which if executed after a jump will result in a double jump with the second jump dependant on the direction
   }
 
-  /**    console.log('player climbed', this.#asPlayerClimbedSuccessfully())
-    console.log('collided', this.collided)
-    console.log('as player fallen', this.#asPlayerFallen())
-   * Quick check to check if the player as collided with any tile given
+  /**
+   * Quick check to check if the player as collided with any tile and also the in which direction x or y
    * _________________________________________________________________
    *
    * @param {Tile} tile tile object
    * ________________________________________________________________
    *
-   * @returns {boolean}
+   * @returns {{isCollided:boolean,collisionDirections:{ xMov: boolean;yMov: boolean;}}}
    *
    */
   #asCollidedWithATile(tile) {
@@ -246,6 +244,8 @@ class Player {
       y: this.y,
       width: this.width,
       height: this.height,
+      speedX: this.speed,
+      speedY: this.vy,
     }
     const tileRect = {
       x: tile.x,
@@ -253,8 +253,10 @@ class Player {
       width: tile.width,
       height: tile.height,
     }
-    const isCollided = checkRectangleCollusion(playerRect, tileRect)
-    return isCollided // return results
+
+    const isCollided = checkRectangleCollision(playerRect, tileRect)
+    const collisionDirections = getCollisionDetection(playerRect, tileRect)
+    return { isCollided, collisionDirections } // return results
   }
 }
 
