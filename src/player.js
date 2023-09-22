@@ -34,12 +34,13 @@ class Player {
     this.gravitySpeed = this.gravity * 0.9807
     this.acceleration = params.acceleration || 1
     this.speed = 0
-    this.collided = false
+    this.collided = false //check collusion in the y direction
+    this.Xcollided = false // check collusion in x direction
     this.vx = 0 //TODO if we are going for a friction on surface also
     this.friction = params.friction || 1 //TODO if we are going for a friction on surface also
     this.x = params.x
     this.vy = 0
-    this.jumpVelocity = 16
+    this.jumpVelocity = 20
     this.y = params.y
   }
   // restart player when game over
@@ -50,7 +51,7 @@ class Player {
    * @param {CanvasRenderingContext2D} ctx canvas rendering context 2D
    */
   draw(ctx) {
-    // Draw a rectangle which will act as the rigidbody mesh also used to determine collisions
+    // Draw a tile which will act as the rigidbody mesh also used to determine collisions
     ctx.save()
     ctx.fillStyle = 'gold'
     ctx.fillRect(this.x, this.y, this.width, this.height)
@@ -89,7 +90,7 @@ class Player {
     this.#playerOnAir()
     // move left and right
     this.x += this.speed
-    // Add a collusion detection which will determine the rigidbody which will be if the player and the tiles have collided and is not spikes
+    // Add a collision detection which will determine the rigidbody which will be if the player and the tiles have collided and is not spikes
     this.#hitSideWalls()
     // player should collide with object with rigidBody
     // TODO: On^2 which more often never be not be a O of ROWS*COLS^2 is not that bad for know level generation will have to evolve to be more optimized later.
@@ -97,7 +98,7 @@ class Player {
       if (tileRow.length > 0) {
         tileRow.forEach((tile) => {
           if (tile) {
-            this.#collusionDetectionObjectsWithRigidBody(tile)
+            this.#collisionDetectionObjectsWithRigidBody(tile)
           }
         })
       }
@@ -133,10 +134,20 @@ class Player {
   #collisionDetectionObjectsWithRigidBody(tile) {
     const { isCollided, collisionDirections } = this.#asCollidedWithATile(tile)
 
-    // check y direction collision
-    if (!collisionDirections.yMov && !tile.disableRigidBody) {
-      this.collided = true
+    // do collision checks only if the tile has not disabled rigidbody
+    if (!tile.disableRigidBody) {
+      // check y direction collision if true don't check x if not then proceed and check for x direction collusion
+      if (collisionDirections.yMov) {
+        this.collided = true
+      } else {
+        // check x direction collision
+        if (collisionDirections.xMov) {
+          this.Xcollided = true
+        }
+      }
     }
+
+    //TODO Check if its gameover may move this to game.js
     if (
       (isCollided && !tile.disableRigidbody && tile.isSpikes) ||
       this.#asPlayerFallen()
@@ -169,6 +180,7 @@ class Player {
     // vertical movement can be the speed of gravity or 0
     this.y += this.vy
     this.collided = false
+    this.Xcollided = false
   }
 
   /**
@@ -179,13 +191,15 @@ class Player {
     // handle moving right up down left <- ^ -> jump pressing Z up and down to do nothing for now
     //left right inputs
     if (
-      input.checkIfAKeyExists(KEY_RIGHT) ||
-      input.checkIfAKeyExists(SWIPE_RIGHT)
+      (input.checkIfAKeyExists(KEY_RIGHT) ||
+        input.checkIfAKeyExists(SWIPE_RIGHT)) &&
+      !this.Xcollided
     ) {
       this.speed = 5
     } else if (
-      input.checkIfAKeyExists(KEY_LEFT) ||
-      input.checkIfAKeyExists(SWIPE_LEFT)
+      (input.checkIfAKeyExists(KEY_LEFT) ||
+        input.checkIfAKeyExists(SWIPE_LEFT)) &&
+      !this.Xcollided
     ) {
       this.speed = -5
     } else {
