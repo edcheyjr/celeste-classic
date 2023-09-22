@@ -1,5 +1,5 @@
 /**
- * update collusion
+ * update collision
  * most of the foreground item will be a child of this or use this directly
  * if collides with the player inform the player or
  * the game it as collide and if the tile is a spike will help result to game over.
@@ -34,7 +34,7 @@ class Tile {
     this.row = params.row || 20
     this.col = params.col || 20
     this.tileWidth = this.canvasWidth / this.row //should nbe 38 for now
-    this.disableRigidbBody = params.disableRigidBody || false
+    this.disableRigidBody = params.disableRigidBody || false
     this.frame = 0 //use the first frame if animated
     this.isSpikes = false // spike tiles
     this.iscollided = false
