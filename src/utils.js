@@ -83,31 +83,31 @@ function getCollisionDetection(rect1, rect2) {
  * @returns {boolean}
  */
 
-function checkRectangleCollusion(rect, rect2) {
+function checkRectangleCollision(rect, rect2) {
   if (
     rect.x > rect2.x + rect2.width ||
     rect.x + rect2.width < rect2.x ||
     rect.y > rect2.y + rect2.height ||
     rect.y + rect.height < rect2.y
   ) {
-    // no collusion
+    // no collision
     return false
   } else {
-    // collusion detected
+    // collision detected
     return true
   }
 }
 /**
- * Checks for circle collusion
+ * Checks for circle collision
  * ---------------------------
- * @description tacks 2 circle {Circle} objects and test for the collusion
+ * @description tacks 2 circle {Circle} objects and test for the collision
  * @example
- * const isCollided = checkCircleCollusion(circle1, circle2)
+ * const isCollided = checkCircleCollision(circle1, circle2)
  * @param {Circle} circle1
  * @param {Circle} circle2
  * @returns
  */
-function checkCircleCollusion(circle1, circle2) {
+function checkCircleCollision(circle1, circle2) {
   const opp = circle1.x - circle2.x
   const adj = circle1.y - circle2.y
   const hypo = Math.sqrt(opp * opp + adj * adj)
@@ -115,7 +115,7 @@ function checkCircleCollusion(circle1, circle2) {
   if (hypo < sumRadii) {
     return true
   } else if (hypo === sumRadii) {
-    // collusion
+    // collision
     console('touching')
     return true
   } else {
