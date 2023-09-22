@@ -35,28 +35,35 @@ function findColAndRowFor1DArr(index, totRows) {
  * @returns {{xMov:boolean, yMov:boolean}} object {y movement:bool, x movement:bool}
  */
 function getCollisionDetection(rect1, rect2) {
-  let X = true
-  let Y = true
-  //check X movement bounce
-  if (
-    rect1.x + rect1.width + rect1.speedX > rect2.x &&
-    rect1.x + rect1.speedX < rect2.x + rect2.width &&
-    rect2.y + rect2.y > rect2.y &&
-    rect2.y < rect2.y + rect2.height
-  ) {
-    // allow movement in the x direction
-    X = false
-  }
+  let X = false
+  let Y = false
+  const currentRect1Right = rect1.x
+  const currentRect1Left = rect1.x + rect1.width
+  const currentRect1Top = rect1.y
+  const currentRect1Bottom = rect1.y + rect1.height
 
-  //check Y movement bounce
+  const nextX = currentRect1Right
+  const nextRect1Right = currentRect1Left
+
+  //if I keep moving in my current X direction, will I collide with the rect2?
+  if (
+    nextRect1Right > rect2.x &&
+    nextX < rect2.x + rect2.width &&
+    currentRect1Bottom > rect2.y &&
+    currentRect1Top < rect2.y + rect2.height
+  ) {
+    // collided from right or left
+    X = true
+  }
+  //check Y movement
   if (
     rect1.x + rect1.width > rect2.x &&
     rect1.x < rect2.x + rect2.width &&
     rect1.y + rect1.height + rect1.speedY > rect2.y &&
     rect1.y + rect1.speedY < rect2.y + rect2.height
   ) {
-    //allow movement in the y direction
-    Y = false
+    //collided from top or bottom
+    Y = true
   }
   return {
     xMov: X,
