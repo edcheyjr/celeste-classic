@@ -124,24 +124,51 @@ function checkCircleCollusion(circle1, circle2) {
 }
 /**
  * interpolation fxn
- * @param {*} A start position
- * @param {*} B last position
- * @param {*} t percentage difference between the positions
+ * ___________________
+ *
+ * @param {object} A vector A
+ * @param {number} A.x x point
+ * @param {number} A.y y point
+ *
+ * @param {object} B  vector B
+ * @param {number} B.x x point
+ * @param {number} B.y y point
+ * @param {number} t percentage difference between the positions
+ * _________________
+ *
  * @returns {int} position btwn postions A and B
+ *
  */
 function lerp(A, B, t) {
   return A + (B - A) * t
 }
 
 /**
- * intersection fxn
+ * Intersection fxn
  * ----------------
- * @description takes vectors A to B AND C to D and find where they intersect otherwise returns null if not co-ordinates
- * @param {*} A start.x
- * @param {*} B start.y
- * @param {*} C end.x
- * @param {*} D end.y
- * @returns {object | null} with x,y positions from the interection of the object against the sensors and the offset
+ * @description takes vectors {A} to {B} AND {C} to {D} and find where they intersect otherwise returns null if not co-ordinates
+ * ___________________________________
+ *
+ * @param {object} A vector A
+ * @param {number} A.x x point
+ * @param {number} A.y y point
+ *
+ * @param {object} B  vector B
+ * @param {number} B.x x point
+ * @param {number} B.y y point
+ *
+ * @param {object} C vector C
+ * @param {number} C.x x point
+ * @param {number} C.y y point
+ *
+ * @param {object} D vector D
+ * @param {number} D.x x point
+ * @param {number} D.y y point
+ * _____________________________________
+ *
+ * @returns {{x:number, y:number, offset:number} | null} with x,y point of intersect or null between x and y and the offset
+ *
+ *
  */
 function getIntersection(A, B, C, D) {
   const tTop = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x)
