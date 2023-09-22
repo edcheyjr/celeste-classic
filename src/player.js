@@ -124,39 +124,19 @@ class Player {
     }
   }
   /**
-   * this function check collusion of the player with other game objects with collision detection
+   * this function check collision of the player with other game objects with collision detection
    * ____________________________________________________________________________________________
    *
    * @param {Tile} tile tile object
    *
    */
-  #collusionDetectionObjectsWithRigidBody(tile) {
-    const isCollided = this.#asCollidedWithATile(tile)
-    if (isCollided && !tile.disableRigidbBody) {
-      // add that found collusion from a tile if any other will be returning false
-      // re-position the player to the top of the tile
-      if (this.y >= tile.y - this.height) {
-        this.collided = true
-        this.y = tile.y - this.height
-      }
-      // hit the top reset to just the bottom of the tile and set collided to false after that so that the player starts falling again
-      else if (this.y <= tile.y + tile.height) {
-        this.y = tile.y + tile.height
-        this.collided = false
-      } else {
-        // means it as not hit top or bottom check sides
-        // also do the same fo the sides if the player hit tile on the side reposition the player just next to the tile
-        // // left
-        if (this.x <= tile.x + tile.width) {
-        }
-        // right
-        if (this.x + this.width >= tile.x) {
-          this.x = tile.x - this.width
-        }
-      }
+  #collisionDetectionObjectsWithRigidBody(tile) {
+    const { isCollided, collisionDirections } = this.#asCollidedWithATile(tile)
+
+    // check y direction collision
+    if (!collisionDirections.yMov && !tile.disableRigidBody) {
+      this.collided = true
     }
-    // also make sure to check if the player falls beyond canvas height restart the section
-    //TODO Check if its gameover move this to
     if (
       (isCollided && !tile.disableRigidbody && tile.isSpikes) ||
       this.#asPlayerFallen()
