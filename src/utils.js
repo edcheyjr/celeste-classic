@@ -14,6 +14,57 @@ function findColAndRowFor1DArr(index, totRows) {
 }
 
 /**
+ * X Y collision return object {y:bool, x:bool}
+ * @description collision in X or Y direction
+ * _____________________________________
+ *
+ * @param {object} rect1 first rectangle params
+ * @param {number} rect1.x x position
+ * @param {number} rect1.y y position
+ * @param {number} rect1.width width
+ * @param {number} rect1.height height
+ * @param {number} rect1.speedX speed for X direction
+ * @param {number} rect1.speedY speed for Y direction
+ * @param {object} rect2 second rectangle params
+ * @param {number} rect2.x x position
+ * @param {number} rect2.y y position
+ * @param {number} rect2.width width
+ * @param {number} rect2.height height
+ * __________________________________
+ *
+ * @returns {{xMov:boolean, yMov:boolean}} object {y movement:bool, x movement:bool}
+ */
+function getCollisionDetection(rect1, rect2) {
+  let X = true
+  let Y = true
+  //check X movement bounce
+  if (
+    rect1.x + rect1.width + rect1.speedX > rect2.x &&
+    rect1.x + rect1.speedX < rect2.x + rect2.width &&
+    rect2.y + rect2.y > rect2.y &&
+    rect2.y < rect2.y + rect2.height
+  ) {
+    // allow movement in the x direction
+    X = false
+  }
+
+  //check Y movement bounce
+  if (
+    rect1.x + rect1.width > rect2.x &&
+    rect1.x < rect2.x + rect2.width &&
+    rect1.y + rect1.height + rect1.speedY > rect2.y &&
+    rect1.y + rect1.speedY < rect2.y + rect2.height
+  ) {
+    //allow movement in the y direction
+    Y = false
+  }
+  return {
+    xMov: X,
+    yMov: Y,
+  }
+}
+
+/**
  * Checks if two rectangle collide or not
  * _____________________________________
  *
