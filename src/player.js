@@ -82,7 +82,7 @@ class Player {
    * _____________________________________________________________________________________________________________________
    * @param {number} deltaTime timeForAnother Animation loop to occur typicly with 16usec for computer on empty animation
    * @param {InputSingleton} input input class provide current input keys
-   * @param {Tile[][]} tiles tiles objects 2D Array
+   * @param {Tile[][]} tiles tiles objects 2D Array i.e level objects
    */
   update(deltaTime, input, tiles) {
     // deltaTime important in determine refresh rate of the player animations

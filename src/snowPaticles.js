@@ -22,9 +22,21 @@ class Particle extends Rectangle {
       Math.random() * (this.minSpeed + this.speedDiff) + this.minSpeed
     this.x
   }
+  /**
+   * Draw funcition
+   * _______________________
+   *
+   * @param {*} ctx context
+   */
   draw(ctx) {
     super.draw(ctx)
   }
+  /**
+   * The snow particle update  function
+   * ---------------------------
+   * _____________________________________________________________________________________________________________________
+   * @param {number} deltaTime timeForAnother Animation loop to occur typicly with 16usec for computer on empty animation
+   */
   update(deltaTime) {
     //TODO: Move this to helper function if required else where calcuating curve and angle speed migth need it when calculating jump
     this.x = this.x + this.speed

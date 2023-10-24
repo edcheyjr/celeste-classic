@@ -4,7 +4,7 @@
  * @param {number[]} level This will be a 1D array with all the values representational of the game objects
  * @param {number} rows Number of rows
  * @param {number} cols  Number of cols
- * @returns {Tile[][]}
+ * @returns {Tile[][]} 2D map of the tiles and game objects
  */
 function levelGenerator(level, rows, cols) {
   const lastItemRowIndex = rows - 1
