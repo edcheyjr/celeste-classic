@@ -20,11 +20,11 @@ This roadmap outlines the steps and milestones for the development of a game ins
 - [ ] Work on gameplay design -
   - [x] keyboard basic movement,
   - [x] collision detection,
+  - [ ] detect spikes
   - [ ] Character movement,
   - [ ] special movements,
   - [ ] rules for game over,
   - [ ] finish touches on game play
-  - [ ] friction against tiles
 - [ ] Break - Take a breather 😮‍💨
 - [ ] Switching from one level to another
 - [ ] Game over, scores, and first-level design
