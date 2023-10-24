@@ -35,6 +35,7 @@ function findColAndRowFor1DArr(index, totRows) {
  * @returns {{xMov:boolean, yMov:boolean}} object {y movement:bool, x movement:bool}
  */
 function getCollisionDetection(rect1, rect2) {
+  let offset = 5
   let X = false
   let Y = false
   const currentRect1Right = rect1.x
@@ -49,22 +50,23 @@ function getCollisionDetection(rect1, rect2) {
   if (
     nextRect1Right > rect2.x &&
     nextX < rect2.x + rect2.width &&
-    currentRect1Bottom > rect2.y &&
-    currentRect1Top < rect2.y + rect2.height
+    currentRect1Bottom > rect2.y + offset &&
+    currentRect1Top < rect2.y + rect2.height - offset
   ) {
     // collided from right or left
     X = true
   }
   //check Y movement
   if (
-    rect1.x + rect1.width > rect2.x &&
-    rect1.x < rect2.x + rect2.width &&
-    rect1.y + rect1.height + rect1.speedY > rect2.y &&
-    rect1.y + rect1.speedY < rect2.y + rect2.height
+    currentRect1Left > rect2.x + offset &&
+    currentRect1Right < rect2.x + rect2.width - offset &&
+    currentRect1Bottom + rect1.speedY > rect2.y &&
+    currentRect1Top + rect1.speedY < rect2.y + rect2.height
   ) {
     //collided from top or bottom
     Y = true
   }
+  // console.log('X', X)
   return {
     xMov: X,
     yMov: Y,

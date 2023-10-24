@@ -139,12 +139,16 @@ class Player {
       // check y direction collision if true don't check x if not then proceed and check for x direction collusion
       if (collisionDirections.yMov) {
         this.collided = true
-      } else {
-        // check x direction collision
-        if (collisionDirections.xMov) {
-          this.Xcollided = true
-        }
       }
+      if (collisionDirections.xMov) {
+        this.Xcollided = collisionDirections.xMov // set x collusion to true
+      }
+    }
+    if (this.Xcollided) {
+      // if it collided remain in the same position
+      console.log('asdasda')
+      this.Xcollided = false
+      this.x = this.x - this.speed
     }
 
     //TODO Check if its gameover may move this to game.js
@@ -180,38 +184,42 @@ class Player {
     // vertical movement can be the speed of gravity or 0
     this.y += this.vy
     this.collided = false
-    this.Xcollided = false
   }
 
   /**
-   *
+   * Input handle movement function
    * @param {InputSingleton} input
    */
   #handlePlayerMovements(input) {
     // handle moving right up down left <- ^ -> jump pressing Z up and down to do nothing for now
-    //left right inputs
+
+    // case one when moving right and not collided
     if (
       (input.checkIfAKeyExists(KEY_RIGHT) ||
         input.checkIfAKeyExists(SWIPE_RIGHT)) &&
       !this.Xcollided
     ) {
       this.speed = 5
-    } else if (
+    }
+    // case one when moving left and not collided
+    else if (
       (input.checkIfAKeyExists(KEY_LEFT) ||
         input.checkIfAKeyExists(SWIPE_LEFT)) &&
       !this.Xcollided
     ) {
       this.speed = -5
     } else {
+      // speed to zero no key input and not collided
       this.speed = 0
     }
-    //Simple Jump
     if (
       (input.checkIfAKeyExists(KEY_X) || input.checkIfAKeyExists(SWIPE_UP)) &&
       this.collided &&
       !this.#asPlayerFallen() &&
       !this.#asPlayerClimbedSuccessfully()
     ) {
+      // console.log('X', this.Xcollided)
+      //Simple Jump
       this.collided = false
       this.vy -= this.jumpVelocity
     }
@@ -244,8 +252,8 @@ class Player {
     const tileRect = {
       x: tile.x,
       y: tile.y,
-      width: tile.width,
-      height: tile.height,
+      width: tile.tileWidth,
+      height: tile.tileWidth,
     }
 
     const isCollided = checkRectangleCollision(playerRect, tileRect)
