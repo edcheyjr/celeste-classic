@@ -31,6 +31,7 @@ function levelGenerator(level, rows, cols) {
     // const EMPTY = 0
     // const UNDERGROUND = 1
     // const SURFACE = 2
+    // const SPIKE = 3
     const { col: x, row: y } = findColAndRowFor1DArr(i, rows)
 
     if (level[i] == UNDERGROUND) {
@@ -63,8 +64,24 @@ function levelGenerator(level, rows, cols) {
         row: rows,
         disableRigidBody: false,
       })
-      // console.log('2Darray', level_2D)
       level_2D[y].push(surface)
+    }
+    // Spikes
+    if (level[i] == SPIKE) {
+      // init spike
+      const spike = new Spike({
+        src: 'assets/spike.svg',
+        canvasWidth: CANVAS_WIDTH,
+        canvasHeight: CANVAS_HEIGHT,
+        width: 30,
+        height: 30,
+        x: x * lastItemColIndex * 2,
+        y: y * lastItemRowIndex * 2,
+        col: cols,
+        row: rows,
+        disableRigidBody: false,
+      })
+      level_2D[y].push(spike)
     }
     // Flowers
     // Grass
