@@ -33,9 +33,15 @@ class Game {
     this.input = InputHandler.getInstance() //Input instance
     this.#initGameObjects() //initialize game objects
   }
+
+  draw() {
+    this.isReady && this.bg.draw(this.ctx)
+    this.isReady && this.gameObjects.forEach((obj) => obj.draw(this.ctx))
+    this.isReady && this.player.draw(this.ctx)
+    this.isReady && this.snowParticles.draw(this.ctx)
+  }
   /**
    * The update  function
-   * ---------------------------
    * _____________________________________________________________________________________________________________________
    * @param {number} deltaTime timeForAnother Animation loop to occur typicly with 16usec for computer on empty animation
    */
@@ -53,12 +59,6 @@ class Game {
       // particles
       this.snowParticles.update(deltaTime)
     }
-  }
-  draw() {
-    this.isReady && this.bg.draw(this.ctx)
-    this.isReady && this.gameObjects.forEach((obj) => obj.draw(this.ctx))
-    this.isReady && this.player.draw(this.ctx)
-    this.isReady && this.snowParticles.draw(this.ctx)
   }
 
   #initGameObjects() {
