@@ -1,5 +1,12 @@
 # Celeste classic My Version
 
+```
+  ___ ___| | ___  ___| |_ ___
+ / __/ _ \ |/ _ \/ __| __/ _ \
+| (_|  __/ |  __/\__ \ ||  __/
+ \___\___|_|\___||___/\__\___|
+```
+
 This fun project to an attempt to clone [celeste classic](https://mattmakesgames.itch.io/celesteclassic) in javascript with a little bit of my own touches.
 
 ## Latest Progress
@@ -16,20 +23,24 @@ This roadmap outlines the steps and milestones for the development of a game ins
 - [x] Start Celeste's game sprites design
 - [x] Build background
 - [x] Work on level designs (Hint using arrays) - TO BE used for rapid-level design
-- [ ] Work on character sprite and animation design
+- [x] Spike assets
 - [ ] Work on gameplay design -
   - [x] keyboard basic movement,
   - [x] collision detection,
-  - [ ] detect spikes
-  - [ ] Character movement,
+  - [x] detect spikes
+  - [x] rules for game over,
+  - [ ] Dissapearing Tiles Logic
+  - [x] Character movement,
   - [ ] special movements,
-  - [ ] rules for game over,
-  - [ ] finish touches on game play
+- [ ] Snow Particle generation and animation on player movemeent
+- [ ] Disappearng Tile animation
+- [ ] Work on character sprite and animation design
 - [ ] Break - Take a breather 😮‍💨
 - [ ] Switching from one level to another
 - [ ] Game over, scores, and first-level design
 - [ ] Game menu design
 - [ ] Animation refinements
+- [ ] Game play finishing touches
 - [ ] Move to module style
 - [ ] Add some levels as examples
 - [ ] License and readme updates
