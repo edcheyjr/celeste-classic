@@ -109,6 +109,7 @@ class Player {
 
   #asPlayerClimbedSuccessfully() {
     if (this.y < 0) {
+      console.log('true')
       return true
     }
     return false
@@ -146,18 +147,15 @@ class Player {
     }
     if (this.Xcollided) {
       // if it collided remain in the same position
-      console.log('asdasda')
       this.Xcollided = false
       this.x = this.x - this.speed
     }
 
     //TODO Check if its gameover may move this to game.js
-    if (
-      (isCollided && !tile.disableRigidbody && tile.isSpikes) ||
-      this.#asPlayerFallen()
-    ) {
+    if ((isCollided && tile.isSpike) || this.#asPlayerFallen()) {
       GAME_OVER = true //TODO use get and setter syntax also get this object from gameobjects
       // Restart section
+      console.log('GAMEOVER', GAME_OVER)
     }
   }
   // checks if the player as fallen beyond gamescreen
