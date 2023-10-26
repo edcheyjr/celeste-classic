@@ -36,7 +36,6 @@ class Tile {
     this.tileWidth = this.canvasWidth / this.row //should nbe 38 for now
     this.disableRigidBody = params.disableRigidBody || false
     this.frame = 0 //use the first frame if animated
-    this.isSpikes = false // spike tiles
     this.iscollided = false
     // this.player = params.player
     // positions
