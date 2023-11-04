@@ -29,9 +29,9 @@ This roadmap outlines the steps and milestones for the development of a game ins
   - [x] collision detection,
   - [x] detect spikes
   - [x] rules for game over,
+  - [ ] special movements,
   - [ ] Dissapearing Tiles Logic
   - [x] Character movement,
-  - [ ] special movements,
 - [ ] Snow Particle generation and animation on player movemeent
 - [ ] Disappearng Tile animation
 - [ ] Work on character sprite and animation design
