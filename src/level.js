@@ -18,6 +18,19 @@ const level1_1D = new Array(COLS * ROWS).fill(EMPTY) // Create a 1D array filled
 
 // for testing
 level1_1D.fill(SURFACE, 0, 20) // Set the first row to SUFACE (1)
+level1_1D.fill(SURFACE, 209, 210) // Set the first row to SUFACE (1)
+level1_1D.fill(SURFACE, 229, 230) // Set the first row to SUFACE (1)
+level1_1D.fill(SURFACE, 249, 250) // Set the first row to SUFACE (1)
+level1_1D.fill(SURFACE, 269, 270) // Set the first row to SUFACE (1)
+level1_1D.fill(SURFACE, 289, 290) // Set the first row to SUFACE (1)
+level1_1D.fill(SURFACE, 309, 310) // Set the first row to SUFACE (1)
+level1_1D.fill(SURFACE, 329, 330) // Set the first row to SUFACE (1)
+level1_1D.fill(SURFACE, 349, 350) // Set the first row to SUFACE (1)
+
+// level1_1D.fill(SURFACE, 224, 225) // Set the first row to SUFAzCE (1)
+// level1_1D.fill(SURFACE, 247, 245) // Set the first row to SUFACE (1)
+// level1_1D.fill(SURFACE, 267, 265) // Set the first row to SUFACE (1)
+// level1_1D.fill(SURFACE, 287, 285)
 level1_1D.fill(UNDERGROUND, 355, 358)
 level1_1D.fill(SURFACE, 352, 355)
 level1_1D.fill(SURFACE, 360, 380) // Set the first row to SUFACE (1)
