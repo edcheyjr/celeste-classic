@@ -1,3 +1,12 @@
+/**
+ *
+ * @param {string} value
+ * @param {Array<string>} array
+ * @returns
+ */
+function checkIfAValueExists(value, array) {
+  return array.indexOf(value) > -1
+}
 // TODO calculate curve for a jump
 function curveMovement() {}
 
