@@ -40,11 +40,16 @@ class Player {
     this.friction = params.friction || 1 //TODO if we are going for a friction on surface also
     this.x = params.x
     this.vy = 0
+    this.XSpeed = 5
     this.jumpVelocity = 20
     this.y = params.y
+    this.faceDirection = [] //Have the current key input left | right | up | down
+    this.faceDirection.push(KEY_LEFT) //default on start
   }
   // restart player when game over
-  restart() {}
+  restart() {
+    //TODO: restart
+  }
   /**
    * Player Draw function
    *_____________________
@@ -197,7 +202,7 @@ class Player {
         input.checkIfAKeyExists(SWIPE_RIGHT)) &&
       !this.Xcollided
     ) {
-      this.speed = 5
+      this.speed = this.XSpeed
     }
     // case one when moving left and not collided
     else if (
@@ -205,13 +210,13 @@ class Player {
         input.checkIfAKeyExists(SWIPE_LEFT)) &&
       !this.Xcollided
     ) {
-      this.speed = -5
+      this.speed = -this.XSpeed
     } else {
       // speed to zero no key input and not collided
       this.speed = 0
     }
     if (
-      (input.checkIfAKeyExists(KEY_X) || input.checkIfAKeyExists(SWIPE_UP)) &&
+      (input.checkIfAKeyExists(KEY_C) || input.checkIfAKeyExists(SWIPE_UP)) &&
       this.collided &&
       !this.#asPlayerFallen() &&
       !this.#asPlayerClimbedSuccessfully()
@@ -221,11 +226,8 @@ class Player {
       this.collided = false
       this.vy -= this.jumpVelocity
     }
-
-    // will help in directing angle of jump on vertical walls i.e if the player touch a vertical wall they will jump at an angle 45
-    // handle special movement such as dash climb and double jump
-    // the player will also have some special movement jumping dashing and climbing down
-    // Dash will require  up and down and right for directing the direction of the dash which if executed after a jump will result in a double jump with the second jump dependant on the direction
+    // special movement
+    this.#specialCharacterMovement(input)
   }
 
   /**
@@ -257,6 +259,59 @@ class Player {
     const isCollided = checkRectangleCollision(playerRect, tileRect)
     const collisionDirections = getCollisionDetection(playerRect, tileRect)
     return { isCollided, collisionDirections } // return results
+  }
+  /**
+   * handle special movement such as dash and climb
+   * the player will also have some special movement jumping dashing and climbing up or down
+   * @param {InputSingleton} input
+   */
+  #specialCharacterMovement(input) {
+    // this.faceDirection.push(...input.keys)
+    // console.log('input.keys', input.keys)
+    //TODO: Get the current position the player is then decide with key input what special move to make
+    // Check collusion with side walls
+    // For climbing up will help in directing angle of jump on vertical walls i.e if the player touch a vertical wall they will jump at an angle 45
+    //climbing down
+    //FACE INPUTS
+    if (input.checkIfAKeyExists(KEY_LEFT)) {
+      if (
+        !checkIfAValueExists(KEY_LEFT, this.faceDirection) &&
+        checkIfAValueExists(KEY_RIGHT, this.faceDirection)
+      ) {
+        this.faceDirection = []
+        this.faceDirection.push(KEY_LEFT)
+      }
+    }
+    if (input.checkIfAKeyExists(KEY_RIGHT)) {
+      if (
+        !checkIfAValueExists(KEY_RIGHT, this.faceDirection) &&
+        checkIfAValueExists(KEY_LEFT, this.faceDirection)
+      ) {
+        this.faceDirection = []
+        this.faceDirection.push(KEY_RIGHT)
+      }
+    }
+    // For up and down we'll check input
+    //dash is dependent on the face of the player and the direction by the arrow last clicked
+    if (input.checkIfAKeyExists(KEY_X) && (!this.Xcollided || !this.collided)) {
+      let dashSpeed = 15
+      if (
+        input.checkIfAKeyExists(KEY_RIGHT) ||
+        input.checkIfAKeyExists(KEY_LEFT) ||
+        input.checkIfAKeyExists(KEY_UP) ||
+        input.checkIfAKeyExists(KEY_DOWN)
+      ) {
+        // Use input keys
+      } else {
+        // Use facedirection instead
+        if (checkIfAValueExists(KEY_LEFT, this.faceDirection)) {
+          this.speed = -this.XSpeed - dashSpeed
+        }
+        if (checkIfAValueExists(KEY_RIGHT, this.faceDirection)) {
+          this.speed = this.XSpeed + dashSpeed
+        }
+      }
+    }
   }
 }
 
