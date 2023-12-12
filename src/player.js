@@ -41,7 +41,7 @@ class Player {
     this.x = params.x
     this.vy = 0
     this.XSpeed = 5
-    this.jumpVelocity = 20
+    this.canDash = false // on get one shot of dash until hit the ground
     this.y = params.y
     this.faceDirection = [] //Have the current key input left | right | up | down
     this.faceDirection.push(KEY_LEFT) //default on start
@@ -183,6 +183,7 @@ class Player {
     } else {
       // set velocity y to 0
       this.vy = 0
+      this.setCanDash(true)
     }
     // vertical movement can be the speed of gravity or 0
     this.y += this.vy
@@ -260,6 +261,17 @@ class Player {
     const collisionDirections = getCollisionDetection(playerRect, tileRect)
     return { isCollided, collisionDirections } // return results
   }
+  getCanDash() {
+    console.log('canDash', this.canDash)
+    return this.canDash
+  }
+  /**
+   * SetCanDash
+   * @param {boolean} value
+   */
+  setCanDash(value) {
+    this.canDash = value
+  }
   /**
    * handle special movement such as dash and climb
    * the player will also have some special movement jumping dashing and climbing up or down
@@ -311,7 +323,10 @@ class Player {
           this.speed = this.XSpeed + dashSpeed
         }
       }
-    }
+      setTimeout(() => {
+        // set dash to false
+        this.setCanDash(false)
+      }, 1000)
   }
 }
   /**
