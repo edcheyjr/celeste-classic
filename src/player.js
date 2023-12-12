@@ -45,6 +45,13 @@ class Player {
     this.vy = 0
     this.XSpeed = 5
     this.canDash = false // on get one shot of dash until hit the ground
+    this.getCanDash = () => {
+      console.log('canDash', this.canDash)
+      return this.canDash
+    }
+    this.setCanDash = (value) => {
+      this.canDash = value
+    }
     this.jumpVelocity = JUMP_VELOCITY
     this.y = params.y
     this.faceDirection = [] //Have the current key input left | right | up | down
@@ -183,7 +190,6 @@ class Player {
       this.vy += this.gravitySpeed
     } else {
       this.vy = 0
-      this.setCanDash(true)
     }
     // vertical movement can be the speed of gravityt.checkIfAKeyExists(SWIPE_UP) or 0
     this.y += this.vy
@@ -257,17 +263,7 @@ class Player {
     const collisionDirections = getCollisionDetection(playerRect, tileRect)
     return { isCollided, collisionDirections } // return results
   }
-  getCanDash() {
-    console.log('canDash', this.canDash)
-    return this.canDash
-  }
-  /**
-   * SetCanDash
-   * @param {boolean} value
-   */
-  setCanDash(value) {
-    this.canDash = value
-  }
+
   /**
    * handle special movement such as dash and climb
    * the player will also have some special movement jumping dashing and climbing up or down
@@ -287,39 +283,19 @@ class Player {
       this.canDash
     ) {
       let dashSpeed = 15
-      if (
-        input.checkIfAKeyExists(KEY_RIGHT) ||
-        input.checkIfAKeyExists(KEY_LEFT) ||
-        input.checkIfAKeyExists(KEY_UP) ||
-        input.checkIfAKeyExists(KEY_DOWN)
-      ) {
-        // up dash Use input keys
-        //FIXME dash problrm
-        if (input.checkIfAKeyExists(KEY_UP)) {
-          this.jumpVelocity = JUMP_VELOCITY + 5
-        } else if (input.checkIfAKeyExists(KEY_DOWN)) {
-          this.jumpVelocity = -JUMP_VELOCITY - 5
-        } else if (input.checkIfAKeyExists(KEY_LEFT)) {
-          this.speed = -this.XSpeed - dashSpeed
-        } else if (input.checkIfAKeyExists(KEY_RIGHT)) {
-          this.speed = this.XSpeed - dashSpeed
-        } else {
-          this.speed = this.XSpeed
-          this.jumpVelocity = JUMP_VELOCITY
-        }
-      } else {
-        // Use facedirection instead
-        if (checkIfAValueExists(KEY_LEFT, this.faceDirection)) {
-          this.speed = -this.XSpeed - dashSpeed
-        }
-        if (checkIfAValueExists(KEY_RIGHT, this.faceDirection)) {
-          this.speed = this.XSpeed + dashSpeed
-        }
+
+      if (checkIfAValueExists(KEY_LEFT, this.faceDirection)) {
+        this.speed = -this.XSpeed - dashSpeed
       }
+      if (checkIfAValueExists(KEY_RIGHT, this.faceDirection)) {
+        this.speed = this.XSpeed + dashSpeed
+      }
+
+      this.setCanDash(false)
       setTimeout(() => {
         // set dash to false
-        this.setCanDash(false)
-      }, 1000)
+        this.setCanDash(true)
+      }, 10000)
     }
   }
   /**
