@@ -36,6 +36,8 @@ class Player {
     this.speed = 0
     this.collided = false //check collusion in the y direction
     this.Xcollided = false // check collusion in x direction
+    this.isOnGround = () => this.collided //just to make it make sense it's touching ground
+    this.isTouchingWalls = () => this.Xcollided
     this.vx = 0 //TODO if we are going for a friction on surface also
     this.friction = params.friction || 1 //TODO if we are going for a friction on surface also
     this.x = params.x
@@ -196,20 +198,16 @@ class Player {
    */
   #handlePlayerMovements(input) {
     // handle moving right up down left <- ^ -> jump pressing Z up and down to do nothing for now
-
-    // case one when moving right and not collided
     if (
       (input.checkIfAKeyExists(KEY_RIGHT) ||
         input.checkIfAKeyExists(SWIPE_RIGHT)) &&
-      !this.Xcollided
+      !this.isTouchingWalls()
     ) {
       this.speed = this.XSpeed
-    }
-    // case one when moving left and not collided
-    else if (
+    } else if (
       (input.checkIfAKeyExists(KEY_LEFT) ||
         input.checkIfAKeyExists(SWIPE_LEFT)) &&
-      !this.Xcollided
+      !this.isTouchingWalls()
     ) {
       this.speed = -this.XSpeed
     } else {
@@ -218,12 +216,12 @@ class Player {
     }
     if (
       (input.checkIfAKeyExists(KEY_C) || input.checkIfAKeyExists(SWIPE_UP)) &&
-      this.collided &&
+      this.isOnGround() &&
       !this.#asPlayerFallen() &&
       !this.#asPlayerClimbedSuccessfully()
     ) {
-      // console.log('X', this.Xcollided)
-      //Simple Jump
+      // console.log('X', this.isTouchingWalls())
+      //Simply Jump
       this.collided = false
       this.vy -= this.jumpVelocity
     }
