@@ -1,3 +1,4 @@
+const JUMP_VELOCITY = 10
 class Player {
   /**
    * --------------
@@ -44,11 +45,12 @@ class Player {
     this.vy = 0
     this.XSpeed = 5
     this.canDash = false // on get one shot of dash until hit the ground
+    this.jumpVelocity = JUMP_VELOCITY
     this.y = params.y
     this.faceDirection = [] //Have the current key input left | right | up | down
-    this.faceDirection.push(KEY_LEFT) //default on start
+    this.faceDirection.push(KEY_RIGHT) //default on start
   }
-  // restart player when game over
+  // restart player when game over//just to make it make sense it's touching ground
   restart() {
     //TODO: restart
   }
@@ -92,6 +94,7 @@ class Player {
    * @param {Tile[][]} tiles tiles objects 2D Array i.e level objects
    */
   update(deltaTime, input, tiles) {
+    this.getCanDash()
     // deltaTime important in determine refresh rate of the player animations
     //player on air
     this.#playerOnAir()
@@ -100,7 +103,6 @@ class Player {
     // Add a collision detection which will determine the rigidbody which will be if the player and the tiles have collided and is not spikes
     this.#hitSideWalls()
     // player should collide with object with rigidBody
-    // TODO: On^2 which more often never be not be a O of ROWS*COLS^2 is not that bad for know level generation will have to evolve to be more optimized later.
     tiles.forEach((tileRow) => {
       if (tileRow.length > 0) {
         tileRow.forEach((tile) => {
@@ -161,8 +163,6 @@ class Player {
     //TODO Check if its gameover may move this to game.js
     if ((isCollided && tile.isSpike) || this.#asPlayerFallen()) {
       GAME_OVER = true //TODO use get and setter syntax also get this object from gameobjects
-      // Restart section
-      console.log('GAMEOVER', GAME_OVER)
     }
   }
   // checks if the player as fallen beyond gamescreen
@@ -174,7 +174,6 @@ class Player {
   }
 
   #playerOnAir() {
-    //TODO: if the player is collided with the tiles sides the activate the gravity but only half or less
     //if the player is not collided with any tiles or reach end of the canvas or fallen or successful jumpover to the next section then they are on air thus activate gravity
     if (
       !this.#asPlayerFallen() &&
@@ -183,11 +182,10 @@ class Player {
     ) {
       this.vy += this.gravitySpeed
     } else {
-      // set velocity y to 0
       this.vy = 0
       this.setCanDash(true)
     }
-    // vertical movement can be the speed of gravity or 0
+    // vertical movement can be the speed of gravityt.checkIfAKeyExists(SWIPE_UP) or 0
     this.y += this.vy
     this.collided = false
   }
@@ -280,30 +278,14 @@ class Player {
     this.#faceCurrentDirection(input)
     //TODO Get the current position the player is then decide with key input what special move to make
     // Check collusion with side walls
-    // For climbing up will help in directing angle of jump on vertical walls i.e if the player touch a vertical wall they will jump at an angle 45
+    // For climbing up will help in directfirsting angle of jump on vertical walls i.e if the player touch a vertical wall they will jump at an angle 45
     //climbing down
-    //FACE INPUTS
-    if (input.checkIfAKeyExists(KEY_LEFT)) {
-      if (
-        !checkIfAValueExists(KEY_LEFT, this.faceDirection) &&
-        checkIfAValueExists(KEY_RIGHT, this.faceDirection)
-      ) {
-        this.faceDirection = []
-        this.faceDirection.push(KEY_LEFT)
-      }
-    }
-    if (input.checkIfAKeyExists(KEY_RIGHT)) {
-      if (
-        !checkIfAValueExists(KEY_RIGHT, this.faceDirection) &&
-        checkIfAValueExists(KEY_LEFT, this.faceDirection)
-      ) {
-        this.faceDirection = []
-        this.faceDirection.push(KEY_RIGHT)
-      }
-    }
-    // For up and down we'll check input
     //dash is dependent on the face of the player and the direction by the arrow last clicked
-    if (input.checkIfAKeyExists(KEY_X) && (!this.Xcollided || !this.collided)) {
+    if (
+      input.checkIfAKeyExists(KEY_X) &&
+      (!this.Xcollided || !this.collided) &&
+      this.canDash
+    ) {
       let dashSpeed = 15
       if (
         input.checkIfAKeyExists(KEY_RIGHT) ||
@@ -311,7 +293,20 @@ class Player {
         input.checkIfAKeyExists(KEY_UP) ||
         input.checkIfAKeyExists(KEY_DOWN)
       ) {
-        // Use input keys
+        // up dash Use input keys
+        //FIXME dash problrm
+        if (input.checkIfAKeyExists(KEY_UP)) {
+          this.jumpVelocity = JUMP_VELOCITY + 5
+        } else if (input.checkIfAKeyExists(KEY_DOWN)) {
+          this.jumpVelocity = -JUMP_VELOCITY - 5
+        } else if (input.checkIfAKeyExists(KEY_LEFT)) {
+          this.speed = -this.XSpeed - dashSpeed
+        } else if (input.checkIfAKeyExists(KEY_RIGHT)) {
+          this.speed = this.XSpeed - dashSpeed
+        } else {
+          this.speed = this.XSpeed
+          this.jumpVelocity = JUMP_VELOCITY
+        }
       } else {
         // Use facedirection instead
         if (checkIfAValueExists(KEY_LEFT, this.faceDirection)) {
@@ -325,8 +320,8 @@ class Player {
         // set dash to false
         this.setCanDash(false)
       }, 1000)
+    }
   }
-}
   /**
    * -------------------------------
    * @param {InputSingleton} input
