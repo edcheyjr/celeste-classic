@@ -266,9 +266,9 @@ class Player {
    * @param {InputSingleton} input
    */
   #specialCharacterMovement(input) {
-    // this.faceDirection.push(...input.keys)
-    // console.log('input.keys', input.keys)
-    //TODO: Get the current position the player is then decide with key input what special move to make
+    // GET THE CURRECT FACE DIRECTION
+    this.#faceCurrentDirection(input)
+    //TODO Get the current position the player is then decide with key input what special move to make
     // Check collusion with side walls
     // For climbing up will help in directing angle of jump on vertical walls i.e if the player touch a vertical wall they will jump at an angle 45
     //climbing down
@@ -314,8 +314,47 @@ class Player {
     }
   }
 }
+  /**
+   * -------------------------------
+   * @param {InputSingleton} input
+   *
+   */
+  #faceCurrentDirection(input) {
+    //FACE INPUTS
+    if (input.checkIfAKeyExists(KEY_RIGHT)) {
+      this.faceDirection = []
+      this.faceDirection.push(KEY_RIGHT)
+    }
+    if (input.checkIfAKeyExists(KEY_LEFT)) {
+      this.faceDirection = []
+      this.faceDirection.push(KEY_LEFT)
+    }
+    if (input.checkIfAKeyExists(KEY_UP)) {
+      if (!checkIfAValueExists(KEY_UP, this.faceDirection)) {
+        this.faceDirection = [...this.faceDirection, KEY_UP]
+      }
+    } else if (input.checkIfAKeyExists(KEY_DOWN)) {
+      if (!checkIfAValueExists(KEY_DOWN, this.faceDirection)) {
+        this.faceDirection = [...this.faceDirection, KEY_DOWN]
+      }
+    }
+    // Remove UP OR DOWN on key release
+    if (checkIfAValueExists(KEY_UP, this.faceDirection)) {
+      if (!input.checkIfAKeyExists(KEY_UP)) {
+        this.faceDirection.pop()
+      }
+    }
+    if (checkIfAValueExists(KEY_DOWN, this.faceDirection)) {
+      if (!input.checkIfAKeyExists(KEY_DOWN)) {
+        this.faceDirection.pop()
+      }
+    }
 
-//TODO Coyote time
+    console.log('face', this.faceDirection)
+  }
+}
+
+//TODO Coyote time/ten sec cool down before you can dash if not on ground
 /**
  * Coyote Time A brief delay between an action and the consequences of that action that has no physical cause and exists only for comedic or gameplay purposes.
  *
